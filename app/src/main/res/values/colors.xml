@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="paper">#FFF5F2EB</color>
+    <color name="ink">#FF17201D</color>
+    <color name="jade">#FF0F7A64</color>
+    <color name="transparent">#00000000</color>
+</resources>

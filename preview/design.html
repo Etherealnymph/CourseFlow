@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>时屿 CourseFlow · 设计预览</title>
+<style>
+  :root{
+    --paper:#F4F1EA; --surface:#FFFFFF; --surface2:#F8F5EE; --ink:#17201D;
+    --sub:#5F6D66; --faint:#98A29D; --line:#E5DFD4; --jade:#0F7A64;
+    --jade-soft:#DDEFE9; --coral:#E1582E; --blue:#356C8A; --purple:#7563A8;
+    --gold:#C08A2E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#0B100F;color:#EAF1ED;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;}
+  body{min-height:100vh; padding:30px 36px 24px; position:relative; overflow:hidden;}
+  body:before{content:"";position:absolute;width:760px;height:760px;right:-260px;top:-360px;border-radius:50%;
+    background:radial-gradient(circle, rgba(15,122,100,.25), transparent 68%);}
+  body:after{content:"";position:absolute;width:620px;height:620px;left:-260px;bottom:-360px;border-radius:50%;
+    background:radial-gradient(circle, rgba(225,88,46,.11), transparent 70%);}
+  .masthead{display:flex;align-items:flex-end;justify-content:space-between;max-width:1180px;margin:0 auto 18px;position:relative;z-index:2}
+  .brandline{display:flex;align-items:center;gap:13px}
+  .logo{width:44px;height:44px;border-radius:13px;background:#0F7A64;display:flex;align-items:center;justify-content:center;
+    color:#F4F1EA;font-weight:700;font-size:21px;box-shadow:0 10px 30px rgba(15,122,100,.25)}
+  .wordmark{font-size:23px;font-weight:600;letter-spacing:.02em}
+  .eyebrow{font-size:9px;letter-spacing:.24em;color:#8EA39B;font-weight:600;margin-top:3px}
+  .masthead p{font-size:12px;color:#8B9C94;letter-spacing:.02em}
+  .stage{display:flex;gap:30px;justify-content:center;align-items:flex-start;max-width:1180px;margin:0 auto;position:relative;z-index:2}
+  .phone{width:350px;height:678px;border-radius:42px;padding:7px;background:linear-gradient(160deg,#3e4a46,#161c1a 42%,#2c3531);
+    box-shadow:0 35px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.12);flex:none;position:relative}
+  .screen{width:100%;height:100%;border-radius:35px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .screen.light{background:var(--paper);color:var(--ink)}
+  .screen.dark{background:#0C1211;color:#EAF1ED}
+  .ambient{position:absolute;inset:0;pointer-events:none}
+  .light .ambient:before{content:"";position:absolute;width:430px;height:430px;right:-150px;top:-180px;border-radius:50%;
+    background:radial-gradient(circle,rgba(15,122,100,.12),transparent 68%)}
+  .light .ambient:after{content:"";position:absolute;width:360px;height:360px;left:-160px;bottom:40px;border-radius:50%;
+    background:radial-gradient(circle,rgba(225,88,46,.09),transparent 70%)}
+  .dark .ambient:before{content:"";position:absolute;width:420px;height:420px;right:-150px;top:-160px;border-radius:50%;
+    background:radial-gradient(circle,rgba(106,214,185,.16),transparent 70%)}
+  .dark .ambient:after{content:"";position:absolute;width:380px;height:380px;left:-170px;bottom:20px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,139,102,.10),transparent 72%)}
+  .status{height:34px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:10.5px;font-weight:600;opacity:.9;position:relative;z-index:2}
+  .status .sig{display:flex;gap:4px;align-items:center}.bars{display:flex;gap:1.5px;align-items:flex-end}.bars i{display:block;width:2px;background:currentColor;border-radius:1px}
+  .body{flex:1;overflow:hidden;position:relative;z-index:1;display:flex;flex-direction:column}
+  .hdr{padding:7px 20px 0;flex:none}
+  .brandrow{display:flex;align-items:center;gap:9px}
+  .mini-logo{width:34px;height:34px;border-radius:11px;background:var(--jade);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+  .brandtext{flex:1}.brandtext b{display:block;font-size:14px;font-weight:600;letter-spacing:.02em}
+  .brandtext span{display:block;font-size:7px;letter-spacing:.23em;color:var(--faint);margin-top:2px;font-weight:600}
+  .iconbtn{width:34px;height:34px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--sub);background:transparent}
+  .light .iconbtn.filled{background:var(--surface2)}
+  .dark .iconbtn.filled{background:#1B2723;color:#A4B2AB}
+  .titlerow{display:flex;align-items:flex-end;margin-top:14px}
+  .bigweek{font-size:31px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+  .meta{font-size:10px;color:var(--sub);margin-top:5px;letter-spacing:.01em}
+  .weekbot{display:flex;justify-content:space-between;align-items:center;margin-top:13px;border-radius:13px;padding:5px 4px;border:1px solid var(--line);background:var(--surface)}
+  .weekbot .arrow{width:32px;height:32px;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:17px}
+  .weekbot .range{font-size:10.5px;font-weight:600}
+  .gridwrap{margin:10px 11px 0;border:1px solid var(--line);background:var(--surface);border-radius:18px;overflow:hidden;flex:1;min-height:0;display:flex;flex-direction:column;position:relative}
+  .gridhead{display:grid;grid-template-columns:32px repeat(7,1fr);height:52px;align-items:center;flex:none}
+  .gutter{font-size:8px;color:var(--faint);text-align:center}
+  .dayhead{text-align:center;font-size:9px;color:var(--sub);font-weight:600}
+  .dayhead span{display:block;font-size:8px;font-weight:400;color:var(--faint);margin-top:3px}
+  .dayhead.today{color:var(--jade)}
+  .dayhead.today span{color:var(--jade)}
+  .grid{display:grid;grid-template-columns:32px repeat(7,1fr);position:relative;flex:1}
+  .timecol{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+  .tcell{height:58px;text-align:center;border-bottom:1px solid rgba(0,0,0,.04);padding-top:7px;color:var(--sub)}
+  .tcell b{display:block;font-size:8.5px;font-weight:600}.tcell span{display:block;font-size:6.5px;color:var(--faint);margin-top:2px}
+  .daycol{position:relative;border-top:1px solid var(--line);border-left:1px solid rgba(0,0,0,.035);background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 57px,rgba(0,0,0,.05) 57px,rgba(0,0,0,.05) 58px)}
+  .dark .daycol{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 57px,rgba(255,255,255,.06) 57px,rgba(255,255,255,.06) 58px);border-left-color:rgba(255,255,255,.04)}
+  .daycol.today{background-color:rgba(15,122,100,.045)}
+  .dark .daycol.today{background-color:rgba(106,214,185,.05)}
+  .course{position:absolute;left:2px;right:2px;border-radius:6px;padding:4px 3px 3px 6px;font-size:8px;font-weight:600;line-height:1.25;color:var(--ink);overflow:hidden;border:1px solid rgba(0,0,0,.04)}
+  .dark .course{color:#EAF1ED;border-color:rgba(255,255,255,.05)}
+  .course:before{content:"";position:absolute;left:0;top:4px;bottom:4px;width:2.5px;border-radius:2px;background:var(--c)}
+  .course small{display:block;font-size:6.5px;font-weight:400;color:var(--faint);margin-top:3px}
+  .fab{position:absolute;right:14px;bottom:13px;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:var(--jade);color:#fff;font-size:24px;font-weight:300;box-shadow:0 9px 20px rgba(15,122,100,.3);z-index:5}
+  .dark .fab{background:#6AD6B9;color:#08201A;box-shadow:0 9px 22px rgba(0,0,0,.35)}
+  .bottom{flex:none;padding:6px 12px 14px;position:relative;z-index:4}
+  .nav{height:58px;border-radius:22px;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;justify-content:space-around;box-shadow:0 8px 24px rgba(23,32,29,.07)}
+  .dark .nav{background:#16201D;border-color:#29352F;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+  .navitem{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:7.5px;color:var(--faint);width:38px;padding:4px 0}
+  .navitem i{font-style:normal;font-size:16px}.navitem.on{color:var(--jade)}.dark .navitem.on{color:#6AD6B9}
+  .navitem.on .nicon{background:var(--jade-soft)}.dark .navitem.on .nicon{background:#1D3B34}
+  .nicon{width:32px;height:21px;border-radius:11px;display:flex;align-items:center;justify-content:center}
+  .dash{position:absolute;top:46px;bottom:47px;left:44px;width:1px;background:var(--line)}
+  .dark .dash{background:#29352F}
+  .scrollbody{flex:1;overflow:hidden;padding:10px 18px 0}
+  .seg{display:flex;background:var(--surface2);border-radius:12px;padding:3px;margin:12px 0 9px}
+  .dark .seg{background:#1B2723}
+  .seg div{flex:1;text-align:center;font-size:10px;font-weight:600;padding:8px 0;border-radius:9px;color:var(--faint)}
+  .seg .on{background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:0 1px 4px rgba(0,0,0,.03)}
+  .dark .seg .on{background:#16201D;color:#EAF1ED;border-color:#29352F}
+  .weekstrip{display:flex;gap:3px;margin-top:2px}
+  .wd{flex:1;text-align:center;padding:6px 0 5px;border-radius:11px;color:var(--faint);font-size:8px}
+  .wd b{display:block;font-size:14px;color:var(--ink);margin-top:3px;font-weight:500}
+  .wd.on{background:var(--jade);color:rgba(255,255,255,.7)}.wd.on b{color:#fff}
+  .dark .wd b{color:#EAF1ED}.dark .wd.on{background:#6AD6B9}.dark .wd.on b{color:#08201A}.dark .wd.on{color:rgba(8,32,26,.65)}
+  .daytitle{font-size:19px;font-weight:600;margin-top:15px}
+  .section{display:flex;align-items:center;justify-content:space-between;margin-top:15px;margin-bottom:7px}
+  .section b{font-size:9px;letter-spacing:.13em;color:var(--sub);font-weight:600}.section span{font-size:9px;color:var(--faint)}
+  .classcard{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;margin-bottom:7px}
+  .dark .classcard{background:#16201D;border-color:#29352F}
+  .ctime{width:44px;text-align:center;font-size:11px;font-weight:600}.ctime span{display:block;font-size:8px;color:var(--faint);font-weight:400;margin-top:2px}
+  .cbar{width:3px;height:36px;border-radius:2px;background:var(--c);margin:0 9px 0 7px}
+  .cinfo{flex:1;min-width:0}.cinfo b{display:block;font-size:11px;font-weight:600}.cinfo span{display:block;font-size:8px;color:var(--sub);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tag{font-size:7px;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 13%,transparent);padding:3px 6px;border-radius:10px;white-space:nowrap}
+  .dark .tag{background:color-mix(in srgb,var(--c) 24%,#16201D)}
+  .taskcard{display:flex;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:9px 10px;margin-bottom:7px;gap:9px}
+  .dark .taskcard{background:#16201D;border-color:#29352F}
+  .check{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--jade);flex:none}
+  .taskinfo{flex:1}.taskinfo b{display:block;font-size:10.5px;font-weight:600}.taskinfo span{display:block;font-size:8px;color:var(--faint);margin-top:3px}
+  .priority{font-size:7px;color:var(--coral);background:rgba(225,88,46,.12);padding:3px 6px;border-radius:9px;font-weight:600}
+  .dark .priority{background:rgba(255,139,102,.16)}
+  /* dark weekly agenda */
+  .wkhdr{padding:7px 20px 0}
+  .wknav{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);background:#16201D;border-radius:13px;padding:4px 6px;margin-top:13px}
+  .dark .wknav{border-color:#29352F}
+  .wknav span{font-size:10px;font-weight:600}
+  .dayblock{background:#16201D;border:1px solid #29352F;border-radius:16px;padding:10px 11px;margin-top:9px}
+  .dayblock.today{background:rgba(29,59,52,.55);border-color:#45665c}
+  .dbhead{display:flex;align-items:center;gap:7px}
+  .dbnum{font-size:20px;font-weight:600;color:#EAF1ED;min-width:27px}.dayblock.today .dbnum{color:#6AD6B9}
+  .dbmeta{flex:1}.dbmeta b{display:block;font-size:9px;color:#A4B2AB}.dbmeta span{display:block;font-size:7.5px;color:#70807A;margin-top:1px}
+  .pill{font-size:7px;color:#6AD6B9;background:#1D3B34;padding:3px 7px;border-radius:9px;font-weight:600}
+  .wrow{display:flex;align-items:center;gap:6px;margin-top:7px}
+  .wrow .t{font-size:8px;color:#70807A;min-width:30px}
+  .wrow .dot{width:5px;height:5px;border-radius:2px;background:var(--c)}
+  .wrow b{font-size:9px;font-weight:600;color:#EAF1ED}.wrow span{font-size:7.5px;color:#70807A;margin-left:auto}
+  .wtask{display:flex;align-items:center;gap:6px;margin-top:6px}
+  .wtask .c{width:12px;height:12px;border-radius:50%;border:1px solid #6AD6B9}
+  .wtask b{font-size:8.5px;font-weight:400;color:#A4B2AB}
+  /* notes */
+  .noteshdr{padding:7px 20px 0}
+  .notehead{display:flex;align-items:center;margin-top:13px}
+  .notehead .left{flex:1}.notehead h2{font-size:23px;font-weight:600;letter-spacing:-.01em}.notehead p{font-size:9px;color:var(--faint);margin-top:4px}
+  .notelist{padding:10px 18px 0;flex:1;overflow:hidden}
+  .notecard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 12px 11px 15px;margin-bottom:8px;position:relative;overflow:hidden}
+  .notecard:before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:2px;background:var(--c)}
+  .notecard b{font-size:11px;font-weight:600;display:block;padding-right:20px}
+  .notecard p{font-size:8.5px;color:var(--sub);line-height:1.5;margin-top:5px;max-height:26px;overflow:hidden}
+  .notecard .datefont{font-size:7.5px;color:var(--faint);margin-top:6px}
+  .pin{position:absolute;right:11px;top:11px;color:var(--jade);font-size:11px}
+  .lockwrap{margin:18px 22px 0;text-align:center;flex:1;display:flex;flex-direction:column;align-items:center}
+  .halo{width:68px;height:68px;border-radius:50%;background:var(--jade-soft);display:flex;align-items:center;justify-content:center;color:var(--jade);font-size:26px;margin-top:22px}
+  .lockwrap h2{font-size:18px;font-weight:600;margin-top:15px}
+  .lockwrap p{font-size:9.5px;color:var(--sub);line-height:1.6;margin-top:7px;max-width:230px}
+  .field{margin-top:18px;width:100%;height:43px;border:1px solid var(--line);background:var(--surface2);border-radius:12px;display:flex;align-items:center;padding:0 13px;color:var(--faint);font-size:10px}
+  .primary{width:100%;height:44px;border-radius:13px;background:var(--jade);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;margin-top:11px}
+  .dark .primary{background:#6AD6B9;color:#08201A}
+  .forgot{font-size:8.5px;color:var(--faint);margin-top:11px}
+  .segmented{display:flex;background:var(--surface2);border-radius:12px;padding:3px;margin-top:12px;width:100%}
+  .segmented div{flex:1;text-align:center;font-size:9.5px;padding:8px 0;border-radius:9px;color:var(--faint);font-weight:600}
+  .segmented .on{background:var(--surface);border:1px solid var(--line);color:var(--ink)}
+  .badge-count{font-size:11px;color:var(--coral);font-weight:600}
+  .legend{max-width:1180px;margin:22px auto 0;display:flex;gap:22px;justify-content:center;font-size:10.5px;color:#7C8D85;position:relative;z-index:2}
+  .legend span{display:flex;align-items:center;gap:6px}.dot{width:5px;height:5px;border-radius:50%;background:#6AD6B9}
+  .caption{font-size:9px;color:#66766F;letter-spacing:.12em;text-align:center;margin-top:12px;position:relative;z-index:2}
+</style>
+</head>
+<body>
+  <div class="masthead">
+    <div class="brandline">
+      <div class="logo">◒</div>
+      <div>
+        <div class="wordmark">时屿 <span style="font-size:12px;color:#6E8078;font-weight:400;letter-spacing:.12em">COURSEFLOW</span></div>
+        <div class="eyebrow">ANDROID 14 · LOCAL FIRST</div>
+      </div>
+    </div>
+    <p>课程表 / 日程 / 笔记 / 待办 / 闹钟 / 录音 · 日间与夜间</p>
+  </div>
+
+  <div class="stage">
+    <!-- LIGHT WEEK -->
+    <div class="phone">
+      <div class="screen light">
+        <div class="ambient"></div>
+        <div class="status"><span>9:41</span><span class="sig"><span class="bars"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i></span> ● ▰</span></div>
+        <div class="body">
+          <div class="hdr">
+            <div class="brandrow">
+              <div class="mini-logo">◒</div>
+              <div class="brandtext"><b>时屿</b><span>COURSEFLOW</span></div>
+              <div class="iconbtn">☾</div><div class="iconbtn">⋯</div>
+            </div>
+            <div class="titlerow">
+              <div style="flex:1">
+                <div class="bigweek">第 10 周</div>
+                <div class="meta">2026–2027 第一学期 · 11月2日 – 11月8日</div>
+              </div>
+              <div style="font-size:8px;color:var(--jade);background:var(--jade-soft);padding:5px 8px;border-radius:11px;font-weight:600">本周</div>
+            </div>
+            <div class="weekbot"><div class="arrow">‹</div><div class="range">11月2日 – 11月8日</div><div class="arrow">›</div></div>
+          </div>
+          <div class="gridwrap">
+            <div class="gridhead">
+              <div class="gutter">周</div>
+              <div class="dayhead">一<span>2</span></div><div class="dayhead">二<span>3</span></div><div class="dayhead">三<span>4</span></div>
+              <div class="dayhead">四<span>5</span></div><div class="dayhead today">五<span>6</span></div><div class="dayhead">六<span>7</span></div><div class="dayhead">日<span>8</span></div>
+            </div>
+            <div class="grid">
+              <div class="timecol">
+                <div class="tcell"><b>1</b><span>08:30</span></div><div class="tcell"><b>2</b><span>09:20</span></div><div class="tcell"><b>3</b><span>10:20</span></div><div class="tcell"><b>4</b><span>11:20</span></div><div class="tcell"><b>5</b><span>14:30</span></div><div class="tcell"><b>6</b><span>15:20</span></div>
+              </div>
+              <div class="daycol"><div class="course" style="--c:#0F7A64;background:#E4F1EC;top:2px;height:54px">电磁场理论<small>品学楼C203</small></div><div class="course" style="--c:#356C8A;background:#E8EFF4;top:60px;height:54px">信号与系统<small>品学楼C105</small></div></div>
+              <div class="daycol"><div class="course" style="--c:#C08A2E;background:#F7EFDD;top:60px;height:54px">专业写作基础<small>品学楼C210</small></div><div class="course" style="--c:#7563A8;background:#EEEAE5;top:176px;height:54px">半导体器件<small>品学楼C404-A</small></div></div>
+              <div class="daycol"><div class="course" style="--c:#0F7A64;background:#E4F1EC;top:60px;height:54px">电磁场理论<small>品学楼C203</small></div><div class="course" style="--c:#E1582E;background:#F9E8E1;top:234px;height:54px">数据结构与算法II<small>品学楼A304</small></div></div>
+              <div class="daycol"><div class="course" style="--c:#356C8A;background:#E8EFF4;top:2px;height:54px">信号与系统<small>品学楼C105</small></div><div class="course" style="--c:#2B7A78;background:#E6F1EF;top:176px;height:54px">电磁场理论<small>品学楼C203</small></div></div>
+              <div class="daycol today"><div class="course" style="--c:#7563A8;background:#EEEAE5;top:60px;height:54px">半导体器件<small>品学楼C404-A</small></div><div class="course" style="--c:#8A6D3B;background:#F3EDE2;top:234px;height:54px">ECE 项目课<small>6号科研楼A666</small></div></div>
+              <div class="daycol"></div><div class="daycol"></div>
+            </div>
+            <div class="fab">＋</div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="nav">
+            <div class="navitem on"><div class="nicon">▦</div>课表</div>
+            <div class="navitem"><div class="nicon">☷</div>日程</div>
+            <div class="navitem"><div class="nicon">▤</div>笔记</div>
+            <div class="navitem"><div class="nicon">☑</div>待办</div>
+            <div class="navitem"><div class="nicon">◷</div>闹钟</div>
+            <div class="navitem"><div class="nicon">◉</div>录音</div>
+            <div class="navitem"><div class="nicon">⚙</div>设置</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DARK WEEK AGENDA -->
+    <div class="phone">
+      <div class="screen dark">
+        <div class="ambient"></div>
+        <div class="status"><span>9:41</span><span class="sig"><span class="bars"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i></span> ● ▰</span></div>
+        <div class="body">
+          <div class="wkhdr">
+            <div class="brandrow">
+              <div class="mini-logo" style="background:#6AD6B9;color:#08201A">◒</div>
+              <div class="brandtext"><b style="color:#EAF1ED">时屿</b><span style="color:#70807A">COURSEFLOW</span></div>
+              <div class="iconbtn">☀</div><div class="iconbtn">⋯</div>
+            </div>
+            <div class="titlerow">
+              <div style="flex:1"><div class="bigweek" style="color:#EAF1ED">日程</div>
+                <div class="meta" style="color:#A4B2AB">第 10 周 · 11月2日 – 11月8日</div></div>
+              <div class="iconbtn filled" style="color:#6AD6B9">＋</div>
+            </div>
+            <div class="seg"><div>日视图</div><div class="on">周视图</div></div>
+            <div class="wknav"><span style="color:#70807A">‹</span><span style="color:#EAF1ED">11月2日 – 11月8日</span><span style="color:#70807A">›</span></div>
+          </div>
+          <div class="scrollbody" style="padding-left:18px;padding-right:18px">
+            <div style="display:flex;justify-content:space-between;margin:9px 0 1px"><span style="font-size:8px;color:#70807A">本周 8 节课 · 4 项待办</span><span style="font-size:8px;color:#6AD6B9;font-weight:600">回到本周</span></div>
+            <div class="dayblock today">
+              <div class="dbhead"><div class="dbnum">2</div><div class="dbmeta"><b>周一</b><span>11月2日</span></div><div class="pill">今天</div></div>
+              <div class="wrow"><span class="t">08:30</span><span class="dot" style="--c:#0F7A64"></span><b>电磁场理论</b><span>品学楼C203</span></div>
+              <div class="wrow"><span class="t">10:20</span><span class="dot" style="--c:#356C8A"></span><b>信号与系统</b><span>品学楼C105</span></div>
+              <div class="wtask"><span class="c"></span><b>提交电磁场理论实验报告</b></div>
+            </div>
+            <div class="dayblock">
+              <div class="dbhead"><div class="dbnum">3</div><div class="dbmeta"><b>周二</b><span>11月3日</span></div></div>
+              <div class="wrow"><span class="t">10:20</span><span class="dot" style="--c:#C08A2E"></span><b>专业写作基础</b><span>品学楼C210</span></div>
+              <div class="wrow"><span class="t">14:30</span><span class="dot" style="--c:#7563A8"></span><b>半导体器件</b><span>品学楼C404-A</span></div>
+              <div class="wtask"><span class="c"></span><b>随机数学随堂考试</b></div>
+            </div>
+            <div class="dayblock">
+              <div class="dbhead"><div class="dbnum">4</div><div class="dbmeta"><b>周三</b><span>11月4日</span></div></div>
+              <div class="wrow"><span class="t">10:20</span><span class="dot" style="--c:#0F7A64"></span><b>电磁场理论</b><span>品学楼C203</span></div>
+              <div class="wrow"><span class="t">15:20</span><span class="dot" style="--c:#E1582E"></span><b>数据结构与算法II</b><span>品学楼A304</span></div>
+            </div>
+            <div class="dayblock">
+              <div class="dbhead"><div class="dbnum">5</div><div class="dbmeta"><b>周四</b><span>11月5日</span></div></div>
+              <div class="wrow"><span class="t">08:30</span><span class="dot" style="--c:#356C8A"></span><b>信号与系统</b><span>品学楼C105</span></div>
+              <div class="wrow"><span class="t">14:30</span><span class="dot" style="--c:#2B7A78"></span><b>电磁场理论</b><span>品学楼C203</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="nav">
+            <div class="navitem"><div class="nicon">▦</div>课表</div>
+            <div class="navitem on"><div class="nicon">☷</div>日程</div>
+            <div class="navitem"><div class="nicon">▤</div>笔记</div>
+            <div class="navitem"><div class="nicon">☑</div>待办</div>
+            <div class="navitem"><div class="nicon">◷</div>闹钟</div>
+            <div class="navitem"><div class="nicon">◉</div>录音</div>
+            <div class="navitem"><div class="nicon">⚙</div>设置</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES + PRIVATE LOCK -->
+    <div class="phone">
+      <div class="screen light">
+        <div class="ambient"></div>
+        <div class="status"><span>9:41</span><span class="sig"><span class="bars"><i style="height:4px"></i><i style="height:6px"></i><i style="height:8px"></i><i style="height:10px"></i></span> ● ▰</span></div>
+        <div class="body">
+          <div class="noteshdr">
+            <div class="brandrow">
+              <div class="mini-logo">◒</div>
+              <div class="brandtext"><b>时屿</b><span>COURSEFLOW</span></div>
+              <div class="iconbtn">☾</div><div class="iconbtn">⋯</div>
+            </div>
+            <div class="notehead">
+              <div class="left"><div style="font-size:8px;letter-spacing:.18em;color:var(--faint);font-weight:600">NOTES · 笔记</div><h2 style="margin-top:4px">私密笔记</h2><p>已加密 · 需要密码才能查看</p></div>
+              <div class="iconbtn filled" style="color:var(--jade)">＋</div><div class="iconbtn">⋯</div>
+            </div>
+            <div class="segmented"><div>我的笔记</div><div class="on">私密笔记</div></div>
+          </div>
+          <div class="lockwrap">
+            <div class="halo">🔒</div>
+            <h2>私密笔记已锁定</h2>
+            <p>2 条加密笔记。输入密码后才能查看和编辑，离开页面会自动锁定。</p>
+            <div class="field">输入私密密码</div>
+            <div class="primary">解锁</div>
+            <div class="forgot">忘记密码？重置私密空间</div>
+            <div style="margin-top:17px;font-size:8px;color:var(--faint);display:flex;align-items:center;gap:5px">◈ AES-256-GCM · PBKDF2</div>
+          </div>
+        </div>
+        <div class="bottom">
+          <div class="nav">
+            <div class="navitem"><div class="nicon">▦</div>课表</div>
+            <div class="navitem"><div class="nicon">☷</div>日程</div>
+            <div class="navitem on"><div class="nicon">▤</div>笔记</div>
+            <div class="navitem"><div class="nicon">☑</div>待办</div>
+            <div class="navitem"><div class="nicon">◷</div>闹钟</div>
+            <div class="navitem"><div class="nicon">◉</div>录音</div>
+            <div class="navitem"><div class="nicon">⚙</div>设置</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

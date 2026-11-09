@@ -1,0 +1,57 @@
+{
+  "schema": "courseflow.notes",
+  "version": 1,
+  "exportedAt": "2026-11-06 15:30",
+  "notes": [
+    {
+      "id": "note_demo_1",
+      "title": "操作系统 · 复习提纲",
+      "body": "第 6 章 虚拟内存\n\n• 页表与 TLB 的命中路径\n• 缺页中断的处理流程\n• 比较 FIFO / LRU / Clock 置换算法\n\n周五 19:30 小组讨论，记得带上实验三的截图。",
+      "createdAt": 1793500000000,
+      "updatedAt": 1793960000000,
+      "pinned": true,
+      "color": "#0F7A64"
+    },
+    {
+      "id": "note_demo_2",
+      "title": "读书摘记 · 《置身事内》",
+      "body": "“社会进程本是整体，密不可分。”\n\n把课堂上学到的制度经济学，和最近发生的城市更新放在一起看，很多细节忽然有了另一种解释。",
+      "createdAt": 1793200000000,
+      "updatedAt": 1793900000000,
+      "pinned": false,
+      "color": "#C08A2E"
+    }
+  ],
+  "todos": [
+    {
+      "id": "todo_demo_1",
+      "title": "提交操作系统实验报告",
+      "note": "附上实验三运行截图和 500 字总结。",
+      "dueAt": 1793970000000,
+      "done": false,
+      "createdAt": 1793800000000,
+      "doneAt": 0,
+      "priority": 2
+    },
+    {
+      "id": "todo_demo_2",
+      "title": "高数第 7 章习题",
+      "note": "重点：二重积分的换元。",
+      "dueAt": 1794047400000,
+      "done": false,
+      "createdAt": 1793800000000,
+      "doneAt": 0,
+      "priority": 1
+    },
+    {
+      "id": "todo_demo_3",
+      "title": "归还图书馆《算法导论》",
+      "note": "",
+      "dueAt": 1794103200000,
+      "done": false,
+      "createdAt": 1793800000000,
+      "doneAt": 0,
+      "priority": 0
+    }
+  ]
+}
